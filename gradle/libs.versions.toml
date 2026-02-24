@@ -1,0 +1,13 @@
+[versions]
+agp = "9.0.1"
+junit = "4.13.2"
+#noinspection GradleDependency
+support = "25.4.0" # Last version which allows minSdk <14
+
+[libraries]
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+support-fragment = { group = "com.android.support", name = "support-fragment", version.ref = "support" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+
