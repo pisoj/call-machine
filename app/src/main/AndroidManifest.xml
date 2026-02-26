@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.CONTROL_INCALL_EXPERIENCE"
+        tools:ignore="ProtectedPermissions" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -20,6 +25,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".InCallService"
+            android:permission="android.permission.BIND_INCALL_SERVICE"
+            android:exported="true">
+            <!-- See https://android.googlesource.com/platform/frameworks/base/+/master/telecomm/java/android/telecom/TelecomManager.java for meta-data constants -->
+            <!-- Make us manage ringing so we can silence the call that is being auto-answered -->
+            <meta-data android:name="android.telecom.IN_CALL_SERVICE_RINGING" android:value="true" />
+            <!-- TODO: Check what this actually does (hypothesis: it informs us of e.g. WhatsApp calls) -->
+            <meta-data android:name="android.telecom.METADATA_INCLUDE_EXTERNAL_CALLS" android:value="true" />
+            <!-- TODO: Check what this actually does (hypothesis: it let's us control the state of e.g. WhatsApp calls) -->
+            <meta-data android:name="android.telecom.METADATA_INCLUDE_SELF_MANAGED_CALLS" android:value="true" />
+
+            <intent-filter>
+                <action android:name="android.telecom.InCallService"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

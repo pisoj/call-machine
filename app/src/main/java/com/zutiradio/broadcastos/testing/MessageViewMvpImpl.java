@@ -3,34 +3,31 @@ package com.zutiradio.broadcastos.testing;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.zutiradio.broadcastos.R;
+import com.zutiradio.broadcastos.databinding.ScreenMessageBinding;
 
-public class MessageViewMvpImpl extends AbstractViewMvp implements MessageViewMvp {
+public class MessageViewMvpImpl implements MessageViewMvp {
 
-    private final Button button;
-    private final TextView message;
+    private ScreenMessageBinding b;
 
     public MessageViewMvpImpl(LayoutInflater inflater, ViewGroup container, MessageViewMvp.Listener listener) {
-        setRootView(inflater.inflate(R.layout.screen_message, container, false));
+        b = ScreenMessageBinding.inflate(inflater, container, false);
 
-        button = findViewById(R.id.button);
-        message = findViewById(R.id.textView);
+        b.button.setOnClickListener(view -> listener.onUpdateClicked());
+    }
 
-        button.setOnClickListener(view -> {
-            listener.onUpdateClicked();
-        });
+    @Override
+    public View getRootView() {
+        return b.getRoot();
     }
 
     @Override
     public void hideUpdateButton() {
-        button.setVisibility(View.INVISIBLE);
+        b.button.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void setMessage(String msg) {
-        message.setText(msg);
+        b.textView.setText(msg);
     }
 }
