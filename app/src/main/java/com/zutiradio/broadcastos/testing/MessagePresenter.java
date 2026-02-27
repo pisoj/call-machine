@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.zutiradio.broadcastos.BuildConfig;
+
 public class MessagePresenter extends Fragment implements MessageViewMvp.Listener {
 
     private MessageViewMvp messageViewMvp;
@@ -21,7 +23,7 @@ public class MessagePresenter extends Fragment implements MessageViewMvp.Listene
 
     @Override
     public void onUpdateClicked() {
-        messageViewMvp.setMessage("I am going to hide the button now :)");
+        messageViewMvp.setMessage("BroadcastOS version: v" + BuildConfig.VERSION_NAME);
         messageViewMvp.hideUpdateButton();
     }
 }
