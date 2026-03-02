@@ -38,4 +38,13 @@
         android:layout_marginEnd="-1dp"
         android:text="Play now" />
 
+    <Button
+        android:id="@+id/donow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playNowBtn"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:text="Do now" />
+
 </RelativeLayout>

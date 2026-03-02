@@ -1,4 +1,4 @@
-package com.zutiradio.broadcastos.testing;
+package com.zutiradio.broadcastos.presentation;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -32,5 +32,9 @@ public class MessagePresenter extends Fragment implements MessageViewMvp.Listene
     public void onPlayNowClicked() {
         InCallPlayer player = new InCallPlayer(getContext());
         player.execute();
+    }
+
+    @Override
+    public void onDoNowClicked() {
     }
 }

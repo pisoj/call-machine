@@ -1,4 +1,4 @@
-package com.zutiradio.broadcastos.testing;
+package com.zutiradio.broadcastos.presentation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,7 @@ public class MessageViewMvpImpl implements MessageViewMvp {
 
         b.getVersionBtn.setOnClickListener(view -> listener.onGetVersionClicked());
         b.playNowBtn.setOnClickListener(view -> listener.onPlayNowClicked());
-
+        b.donow.setOnClickListener(view -> listener.onDoNowClicked());
     }
 
     @Override

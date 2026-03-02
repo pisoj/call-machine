@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 
-import com.zutiradio.broadcastos.testing.MessagePresenter;
+import com.zutiradio.broadcastos.presentation.MessagePresenter;
 
 public class MainActivity extends FragmentActivity {
 

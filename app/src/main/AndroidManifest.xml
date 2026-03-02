@@ -23,6 +23,7 @@
         tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.CALL_AUDIO_INTERCEPTION"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"

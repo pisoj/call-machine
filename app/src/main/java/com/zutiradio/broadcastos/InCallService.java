@@ -1,12 +1,13 @@
 package com.zutiradio.broadcastos;
 
+import static com.zutiradio.broadcastos.CallCallbackHandler.getNumber;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.media.MediaRecorder;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.net.Uri;
 import android.telecom.Call;
-import android.telecom.CallEndpoint;
+import android.telecom.VideoProfile;
 import android.util.Log;
 
 import java.io.File;
@@ -14,49 +15,23 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.List;
 
-@SuppressLint("NewApi")
 public class InCallService extends android.telecom.InCallService {
 
     @Override
     public void onCallAdded(Call call) {
         super.onCallAdded(call);
-        onSilenceRinger();
 
         call.registerCallback(new CallCallbackHandler(getApplicationContext()));
+        call.answer(VideoProfile.STATE_AUDIO_ONLY);
 
-        Log.d(getClass().getTypeName(), "Call added");
+        Log.d(getClass().getTypeName(), "Call added: " + getNumber(call));
     }
 
     @Override
     public void onCallRemoved(Call call) {
         super.onCallRemoved(call);
         Log.d(getClass().getTypeName(), "Call removed");
-    }
-
-    @Override
-    public void onAvailableCallEndpointsChanged(@NonNull List<CallEndpoint> availableEndpoints) {
-        super.onAvailableCallEndpointsChanged(availableEndpoints);
-        Log.d(getClass().getTypeName(), "Avaiable call endpoints changed to: %s".formatted(availableEndpoints.toString()));
-    }
-
-    @Override
-    public void onConnectionEvent(Call call, String event, Bundle extras) {
-        super.onConnectionEvent(call, event, extras);
-        Log.d(getClass().getTypeName(), "Connection event: %s".formatted(event));
-    }
-
-    @Override
-    public void onSilenceRinger() {
-        super.onSilenceRinger();
-        Log.d(getClass().getTypeName(), "Silent ringer triggered");
-    }
-
-    @Override
-    public void onCanAddCallChanged(boolean canAddCall) {
-        super.onCanAddCallChanged(canAddCall);
-        Log.d(getClass().getTypeName(), "Can add more calls change to: %b".formatted(canAddCall));
     }
 }
 
@@ -120,5 +95,21 @@ class CallCallbackHandler extends Call.Callback {
         recorder.stop();
         recorder.release();
         Log.d(getClass().getTypeName(), "Recording stopped");
+    }
+
+    protected static String getNumber(Call call) {
+        if (call == null) {
+            return null;
+        }
+        if (call.getDetails().getGatewayInfo() != null) {
+            return call.getDetails().getGatewayInfo()
+                    .getOriginalAddress().getSchemeSpecificPart();
+        }
+        Uri handle = getHandle(call);
+        return handle == null ? null : handle.getSchemeSpecificPart();
+    }
+
+    private static Uri getHandle(Call call) {
+        return call == null ? null : call.getDetails().getHandle();
     }
 }

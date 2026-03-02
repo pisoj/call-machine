@@ -1,4 +1,4 @@
-package com.zutiradio.broadcastos.testing;
+package com.zutiradio.broadcastos.presentation;
 
 public interface MessageViewMvp extends ViewMvp {
 
@@ -10,6 +10,8 @@ public interface MessageViewMvp extends ViewMvp {
         void onGetVersionClicked();
 
         void onPlayNowClicked();
+
+        void onDoNowClicked();
     }
 
     void hideUpdateButton();
