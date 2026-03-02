@@ -7,7 +7,9 @@ public interface MessageViewMvp extends ViewMvp {
      * order to get notifications about input events
      */
     interface Listener {
-        void onUpdateClicked();
+        void onGetVersionClicked();
+
+        void onPlayNowClicked();
     }
 
     void hideUpdateButton();

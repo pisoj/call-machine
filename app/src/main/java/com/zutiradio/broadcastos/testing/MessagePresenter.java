@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zutiradio.broadcastos.BuildConfig;
+import com.zutiradio.broadcastos.InCallPlayer;
 
 public class MessagePresenter extends Fragment implements MessageViewMvp.Listener {
 
@@ -22,8 +23,14 @@ public class MessagePresenter extends Fragment implements MessageViewMvp.Listene
     }
 
     @Override
-    public void onUpdateClicked() {
+    public void onGetVersionClicked() {
         messageViewMvp.setMessage("BroadcastOS version: v" + BuildConfig.VERSION_NAME);
         messageViewMvp.hideUpdateButton();
+    }
+
+    @Override
+    public void onPlayNowClicked() {
+        InCallPlayer player = new InCallPlayer(getContext());
+        player.execute();
     }
 }

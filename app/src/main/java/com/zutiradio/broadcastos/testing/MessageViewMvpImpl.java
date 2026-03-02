@@ -13,7 +13,9 @@ public class MessageViewMvpImpl implements MessageViewMvp {
     public MessageViewMvpImpl(LayoutInflater inflater, ViewGroup container, MessageViewMvp.Listener listener) {
         b = ScreenMessageBinding.inflate(inflater, container, false);
 
-        b.button.setOnClickListener(view -> listener.onUpdateClicked());
+        b.getVersionBtn.setOnClickListener(view -> listener.onGetVersionClicked());
+        b.playNowBtn.setOnClickListener(view -> listener.onPlayNowClicked());
+
     }
 
     @Override
@@ -23,7 +25,7 @@ public class MessageViewMvpImpl implements MessageViewMvp {
 
     @Override
     public void hideUpdateButton() {
-        b.button.setVisibility(View.INVISIBLE);
+        b.getVersionBtn.setVisibility(View.INVISIBLE);
     }
 
     @Override

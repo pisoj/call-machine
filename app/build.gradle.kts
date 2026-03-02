@@ -12,10 +12,10 @@ android {
 
     defaultConfig {
         applicationId = "com.zutiradio.broadcastos"
-        minSdk = 14
+        minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.0.2"
+        versionCode = 22
+        versionName = "0.0.22"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
