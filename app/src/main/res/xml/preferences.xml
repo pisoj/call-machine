@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="preferences_main">
+
+    <SwitchPreference
+        android:key="is_answering_machine_enabled"
+        android:title="@string/answer_incoming_calls"
+        android:summaryOn="@string/answering_machine_enabled_message"
+        android:summaryOff="@string/answering_machine_disabled_message" />
+
+    <Preference
+        android:key="greeting_audio_file"
+        android:title="@string/greeting_audio_file"
+        android:summary="@string/no_file_selected" />
+
+    <ListPreference
+        android:key="message_max_duration"
+        android:title="@string/maximum_message_duration"
+        android:summary="60s"
+        android:entries="@array/message_max_duration_entries"
+        android:entryValues="@array/message_max_duration_entry_values"
+        android:defaultValue="60" />
+
+    <ListPreference
+        android:key="message_cooldown_interval"
+        android:title="@string/cooldown_interval_for_single_caller"
+        android:summary="@string/no_cooldown"
+        android:entries="@array/message_cooldown_interval_entries"
+        android:entryValues="@array/message_cooldown_interval_entry_values"
+        android:defaultValue="0" />
+
+    <PreferenceCategory
+        android:title="@string/message_audio_encoding">
+
+        <ListPreference
+            android:key="message_encoding"
+            android:title="@string/format"
+            android:entries="@array/message_encoding_entries"
+            android:entryValues="@array/message_encoding_entry_values"
+            android:defaultValue="0/0" />
+
+        <ListPreference
+            android:key="message_bitrate"
+            android:title="@string/bitrate"
+            android:entries="@array/message_bitrate_entries"
+            android:entryValues="@array/message_bitrate_entry_values"
+            android:defaultValue="0" />
+
+        <ListPreference
+            android:key="message_sample_rate"
+            android:title="@string/sample_rate"
+            android:entries="@array/message_sample_rate_entries"
+            android:entryValues="@array/message_sample_rate_entry_values"
+            android:defaultValue="16000" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/advanced">
+
+        <PreferenceScreen android:title="@string/wet_radio_uploading">
+
+            <SwitchPreference
+                android:key="is_wet_radio_uploading_enabled"
+                android:title="@string/upload_messages_to_wet_radio" />
+
+            <EditTextPreference
+                android:key="wet_radio_base_url"
+                android:title="@string/base_url" />
+
+            <EditTextPreference
+                android:key="wet_radio_target_send_id"
+                android:title="@string/target_send_id"
+                android:summary="@string/target_send_id_message" />
+
+            <EditTextPreference
+                android:key="wet_radio_recorder_field_index"
+                android:title="@string/sound_recorder_field_index"
+                android:summary="@string/sound_recorder_field_index_message" />
+
+            <EditTextPreference
+                android:key="wet_radio_attribution_field_index"
+                android:title="@string/attribution_field_index"
+                android:summary="@string/attribution_field_index_message" />
+
+            <EditTextPreference
+                android:key="wet_radio_privileged_sender_token"
+                android:title="@string/privileged_sender_token"
+                android:summary="@string/privileged_sender_token_message" />
+
+            <Preference
+                android:summary="@string/wet_radio_note"
+                android:selectable="false" />
+
+        </PreferenceScreen>
+
+        <Preference
+            android:key="about"
+            android:title="@string/about" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

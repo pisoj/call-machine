@@ -79,7 +79,7 @@ class CallCallbackHandler extends Call.Callback {
         recorder = new MediaRecorder();
         recorder.setOutputFile(file);
         recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_DOWNLINK);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.OGG);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS);
         try {
             recorder.prepare();

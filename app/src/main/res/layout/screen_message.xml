@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="false"
+        android:layout_marginTop="112dp"
         android:layout_toStartOf="@+id/getVersionBtn"
         android:layout_toLeftOf="@+id/getVersionBtn"
         android:text="BroadcastOS" />
@@ -22,6 +23,7 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
+        android:layout_marginTop="96dp"
         android:layout_alignParentRight="false"
         android:layout_alignParentBottom="false"
         android:text="Display version" />
@@ -45,6 +47,7 @@
         android:layout_below="@+id/playNowBtn"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:text="Do now" />
+        android:text="Do now"
+        android:enabled="false" />
 
 </RelativeLayout>

@@ -1,20 +1,9 @@
 [versions]
 agp = "9.0.1"
 junit = "4.13.2"
-#noinspection GradleDependency
-support = "25.4.0"
-runner = "1.0.2"
-espressoCore = "3.0.2"
-appcompatV7 = "28.0.0" # Last version which allows minSdk <14
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-support-fragment = { group = "com.android.support", name = "support-fragment", version.ref = "support" }
-runner = { group = "com.android.support.test", name = "runner", version.ref = "runner" }
-espresso-core = { group = "com.android.support.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-appcompat-v7 = { group = "com.android.support", name = "appcompat-v7", version.ref = "appcompatV7" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-android-library = { id = "com.android.library", version.ref = "agp" }
-

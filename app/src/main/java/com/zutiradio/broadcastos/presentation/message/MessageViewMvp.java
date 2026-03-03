@@ -1,4 +1,6 @@
-package com.zutiradio.broadcastos.presentation;
+package com.zutiradio.broadcastos.presentation.message;
+
+import com.zutiradio.broadcastos.presentation.ViewMvp;
 
 public interface MessageViewMvp extends ViewMvp {
 

@@ -1,3 +1,203 @@
 <resources>
     <string name="app_name">BroadcastOS</string>
+    <string name="answer_incoming_calls">Answer incoming calls</string>
+    <string name="answering_machine_enabled_message">Calls will automatically be picked up and answered.</string>
+    <string name="answering_machine_disabled_message">Calls will bypass the answering machine.</string>
+    <string name="greeting_audio_file">Greeting audio file</string>
+    <string name="no_file_selected">No file selected</string>
+    <string name="maximum_message_duration">Maximum message duration</string>
+    <string name="cooldown_interval_for_single_caller">Cooldown interval for single caller</string>
+    <string name="no_cooldown">No cooldown</string>
+    <string name="unlimited">Unlimited</string>
+    <string name="message_audio_encoding">Message audio encoding</string>
+    <string name="format">Format</string>
+    <string name="bitrate">Bitrate</string>
+    <string name="sample_rate">Sample rate</string>
+    <string name="bit_depth">Bit depth</string>
+    <string name="wet_radio_uploading">Wet Radio uploading</string>
+    <string name="upload_messages_to_wet_radio">Upload messages to Wet Radio</string>
+    <string name="base_url">Base URL</string>
+    <string name="target_send_id">Target send ID</string>
+    <string name="target_send_id_message">When in admin panel, click on the send type you want to use and look at the URL. it says something like: /admin/send.php?id=2 You can see the ID, in this case 2.</string>
+    <string name="sound_recorder_field_index">Sound recorder filed index</string>
+    <string name="sound_recorder_field_index_message">If the first field is accepting audio recordings, use 1, if the second field is, use 2 etc.</string>
+    <string name="attribution_field_index">Attribution filed index</string>
+    <string name="attribution_field_index_message">The index of a text field that will be populated with the phone number and the name of the contact (if the caller is in contacts).</string>
+    <string name="privileged_sender_token">Privileged sender token</string>
+    <string name="privileged_sender_token_message">Bypasses the timeout imposed by Wet Radio after sending each recording. Also allows using a disabled send type.</string>
+    <string name="wet_radio_note">If any field other that the two mentioned is marked as "required", uploading will fail.</string>
+    <string name="advanced">Advanced</string>
+    <string name="about">About</string>
+
+    <string-array name="message_max_duration_entries">
+        <item>No limit</item>
+        <item>5s</item>
+        <item>10s</item>
+        <item>15s</item>
+        <item>20s</item>
+        <item>25s</item>
+        <item>30s</item>
+        <item>40s</item>
+        <item>50s</item>
+        <item>60s</item>
+        <item>90s</item>
+        <item>2 minute</item>
+        <item>3 minutes</item>
+        <item>4 minutes</item>
+        <item>5 minutes</item>
+        <item>6 minutes</item>
+        <item>7 minutes</item>
+        <item>8 minutes</item>
+        <item>9 minutes</item>
+        <item>10 minutes</item>
+        <item>15 minutes</item>
+        <item>20 minutes</item>
+        <item>25 minutes</item>
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>60 minutes</item>
+        <item>90 minutes</item>
+        <item>120 minutes</item>
+    </string-array>
+    <string-array name="message_max_duration_entry_values">
+        <!-- Do not translate -->
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>90</item>
+        <item>120</item>
+        <item>180</item>
+        <item>240</item>
+        <item>300</item>
+        <item>360</item>
+        <item>420</item>
+        <item>480</item>
+        <item>540</item>
+        <item>600</item>
+        <item>900</item>
+        <item>1200</item>
+        <item>1500</item>
+        <item>1800</item>
+        <item>2700</item>
+        <item>3600</item>
+        <item>5400</item>
+        <item>7200</item>
+    </string-array>
+
+    <string-array name="message_cooldown_interval_entries">
+        <item>Disable cooldown</item>
+        <item>5s</item>
+        <item>10s</item>
+        <item>15s</item>
+        <item>20s</item>
+        <item>25s</item>
+        <item>30s</item>
+        <item>40s</item>
+        <item>50s</item>
+        <item>60s</item>
+        <item>90s</item>
+        <item>2 minutes</item>
+        <item>3 minutes</item>
+        <item>4 minutes</item>
+        <item>5 minutes</item>
+    </string-array>
+    <string-array name="message_cooldown_interval_entry_values">
+        <!-- Do not translate -->
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>90</item>
+        <item>120</item>
+        <item>180</item>
+        <item>240</item>
+        <item>300</item>
+    </string-array>
+
+    <string-array name="message_encoding_entries">
+        <item>System default</item>
+        <item>OPUS/Ogg</item>
+        <item>OPUS/Webm</item>
+        <item>VORBIS/Ogg</item>
+        <item>AAC/mp4</item>
+        <item>HE AAC/mp4</item>
+        <item>AAC ELD/mp4</item>
+        <item>AMR NB</item>
+        <item>AMR WB</item>
+    </string-array>
+    <string-array name="message_encoding_entry_values">
+        <!-- Do not translate -->
+        <item>0/0</item>
+        <item>7/11</item>
+        <item>7/9</item>
+        <item>6/11</item>
+        <item>3/2</item>
+        <item>4/2</item>
+        <item>5/2</item>
+        <item>1/3</item>
+        <item>2/4</item>
+    </string-array>
+
+    <string-array name="message_bitrate_entries">
+        <item>System default</item>
+        <item>8 kbps</item>
+        <item>16 kbps</item>
+        <item>24 kbps</item>
+        <item>32 kbps</item>
+        <item>48 kbps</item>
+        <item>56 kbps</item>
+        <item>64 kbps</item>
+        <item>72 kbps</item>
+        <item>80 kbps</item>
+        <item>96 kbps</item>
+        <item>128 kbps</item>
+        <item>160 kbps</item>
+        <item>192 kbps</item>
+        <item>256 kbps</item>
+        <item>320 kbps</item>
+    </string-array>
+    <string-array name="message_bitrate_entry_values">
+        <!-- Do not translate -->
+        <item>0</item>
+        <item>8</item>
+        <item>16</item>
+        <item>24</item>
+        <item>32</item>
+        <item>48</item>
+        <item>56</item>
+        <item>64</item>
+        <item>72</item>
+        <item>80</item>
+        <item>96</item>
+        <item>128</item>
+        <item>160</item>
+        <item>192</item>
+        <item>256</item>
+        <item>320</item>
+    </string-array>
+
+    <string-array name="message_sample_rate_entries">
+        <item>8 kHZ</item>
+        <item>16 kHZ</item>
+        <item>48 kHZ</item>
+    </string-array>
+    <string-array name="message_sample_rate_entry_values">
+        <!-- Do not translate -->
+        <item>8000</item>
+        <item>16000</item>
+        <item>48000</item>
+    </string-array>
 </resources>

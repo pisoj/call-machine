@@ -42,6 +42,4 @@ android {
 
 dependencies {
     testImplementation(libs.junit)
-
-    implementation(libs.support.fragment)
 }

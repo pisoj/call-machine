@@ -1,10 +1,11 @@
-package com.zutiradio.broadcastos.presentation;
+package com.zutiradio.broadcastos.presentation.message;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.zutiradio.broadcastos.databinding.ScreenMessageBinding;
+import com.zutiradio.broadcastos.presentation.EdgeToEdge;
 
 public class MessageViewMvpImpl implements MessageViewMvp {
 
