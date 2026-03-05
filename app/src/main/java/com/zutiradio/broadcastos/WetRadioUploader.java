@@ -78,6 +78,9 @@ public class WetRadioUploader implements Parcelable {
         request.close();
 
         int responseCode = httpConnection.getResponseCode();
+        if (shouldDeleteAfterUpload && responseCode >= 200 && responseCode < 300) {
+            audioFile.delete();
+        }
         if (responseDstFile != null) {
             InputStream responseStream;
             if (responseCode >= 200 && responseCode < 300) {
