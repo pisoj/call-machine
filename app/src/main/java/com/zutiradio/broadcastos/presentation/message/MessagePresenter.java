@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.zutiradio.broadcastos.BuildConfig;
 import com.zutiradio.broadcastos.InCallPlayer;
-import com.zutiradio.broadcastos.presentation.EdgeToEdge;
 
 public class MessagePresenter extends Fragment implements MessageViewMvp.Listener {
 
@@ -30,8 +29,6 @@ public class MessagePresenter extends Fragment implements MessageViewMvp.Listene
 
     @Override
     public void onPlayNowClicked() {
-        InCallPlayer player = new InCallPlayer(getContext());
-        player.execute();
     }
 
     @Override

@@ -6,13 +6,11 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ListView;
 
-import com.zutiradio.broadcastos.presentation.EdgeToEdge;
+import com.zutiradio.broadcastos.presentation.EdgeToEdgeHelpers;
 
 public abstract class EdgeToEdgePreferenceFragment extends PreferenceFragment {
 
@@ -20,7 +18,7 @@ public abstract class EdgeToEdgePreferenceFragment extends PreferenceFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         View listView = view.findViewById(android.R.id.list);
-        EdgeToEdge.applyInsets(listView);
+        EdgeToEdgeHelpers.applyInsets(listView);
         if (listView instanceof ListView) {
             ((ListView) listView).setClipToPadding(false);
         }
@@ -49,7 +47,7 @@ public abstract class EdgeToEdgePreferenceFragment extends PreferenceFragment {
                         if (dialogListView instanceof ListView) {
                             ((ListView) dialogListView).setClipToPadding(false);
                         }
-                        EdgeToEdge.applyInsets(dialogListView);
+                        EdgeToEdgeHelpers.applyInsets(dialogListView);
                     }
                 }
             }

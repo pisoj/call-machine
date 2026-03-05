@@ -1,115 +1,92 @@
 package com.zutiradio.broadcastos;
 
-import static com.zutiradio.broadcastos.CallCallbackHandler.getNumber;
+import static com.zutiradio.broadcastos.CallHelpers.getPhoneNumber;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.media.MediaRecorder;
-import android.net.Uri;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.telecom.Call;
 import android.telecom.VideoProfile;
-import android.util.Log;
+import android.widget.Toast;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
+import java.util.Set;
 
 public class InCallService extends android.telecom.InCallService {
 
     @Override
     public void onCallAdded(Call call) {
         super.onCallAdded(call);
+        SharedPreferences sharedPreferences = getSharedPreferences(getPackageName() + "_preferences", Context.MODE_PRIVATE);
+        if (!shouldProcessCall(call,
+                sharedPreferences.getStringSet("allowed_country_codes", Set.of()),
+                sharedPreferences.getBoolean("is_answering_machine_enabled", false))) return;
 
-        call.registerCallback(new CallCallbackHandler(getApplicationContext()));
+        call.registerCallback(new CallCallbackHandler(getApplicationContext(), sharedPreferences, call));
         call.answer(VideoProfile.STATE_AUDIO_ONLY);
-
-        Log.d(getClass().getTypeName(), "Call added: " + getNumber(call));
     }
 
-    @Override
-    public void onCallRemoved(Call call) {
-        super.onCallRemoved(call);
-        Log.d(getClass().getTypeName(), "Call removed");
+    /**
+     * @param allowedCountryCodes List of numbers "1", "44", "42". **Without** the leading `+` symbol.
+     */
+    private static boolean shouldProcessCall(@NonNull Call call, @NotNull Iterable<String> allowedCountryCodes, boolean isAnsweringMachineEnabled) {
+        if (!isAnsweringMachineEnabled) return false;
+        if (call.getDetails().getCallDirection() != Call.Details.DIRECTION_INCOMING) return false;
+
+        boolean isAllowedCountryCode = false;
+        String callNumber = getPhoneNumber(call);
+        for (String countryCode: allowedCountryCodes) {
+            if (!callNumber.startsWith('+' + countryCode)) continue;
+            isAllowedCountryCode = true;
+            break;
+        }
+
+        return isAllowedCountryCode;
     }
 }
 
-@SuppressLint("NewApi")
-class CallCallbackHandler extends Call.Callback {
+class CallCallbackHandler extends Call.Callback implements InCallPlayer.InCallPlayerCallback {
 
-    private final Context ctx;
+    private final InCallRecorder inCallRecorder;
 
-    private MediaRecorder recorder;
+    private final InCallPlayer inCallPlayer;
 
-    CallCallbackHandler(Context ctx) {
-        this.ctx = ctx;
+    private final File greeting;
+
+    CallCallbackHandler(Context ctx, SharedPreferences sharedPreferences, Call call) {
+        this.inCallRecorder = new InCallRecorder(ctx, sharedPreferences, call);
+        this.inCallPlayer = new InCallPlayer(ctx, sharedPreferences, this);
+
+        File greetingFile = new File(ctx.getFilesDir(), "greeting");
+        if (greetingFile.exists()) {
+            this.greeting = greetingFile;
+        } else {
+            Toast.makeText(ctx, R.string.greeting_file_does_not_exist, Toast.LENGTH_LONG).show();
+            this.greeting = null;
+        }
     }
 
     @Override
     public void onStateChanged(Call call, int state) {
         super.onStateChanged(call, state);
-        Log.d(getClass().getTypeName(), "Call state changed: %s".formatted(state));
         switch (state) {
             case Call.STATE_ACTIVE:
-                startRecording(call);
+                if (greeting != null) {
+                    inCallPlayer.play(greeting);
+                } else {
+                    inCallRecorder.startRecording();
+                }
                 break;
             case Call.STATE_DISCONNECTING:
-                stopRecording();
+                inCallRecorder.stopRecording();
                 break;
         }
     }
 
     @Override
-    public void onCallDestroyed(Call call) {
-        super.onCallDestroyed(call);
-        Log.d(getClass().getTypeName(), "Call destroyed");
-    }
-
-    private void startRecording(Call call) {
-
-        Log.d(getClass().getTypeName(), "External media directories: %s".formatted(Arrays.toString(ctx.getExternalMediaDirs())));
-
-        File file = new File(ctx.getFilesDir(),
-                call.getDetails().getCallerDisplayName()
-                        + ZonedDateTime.now().format(DateTimeFormatter.ISO_INSTANT)
-                        + ".ogg"
-        );
-
-        recorder = new MediaRecorder();
-        recorder.setOutputFile(file);
-        recorder.setAudioSource(MediaRecorder.AudioSource.VOICE_DOWNLINK);
-        recorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS);
-        try {
-            recorder.prepare();
-        } catch (IOException e) {
-            Log.e(getClass().getTypeName(), "Failed to prepare audio recorder", e);
-        } finally {
-            recorder.start();
-            Log.d(getClass().getTypeName(), "Recording to: " + file.getAbsolutePath());
-        }
-    }
-
-    private void stopRecording() {
-        recorder.stop();
-        recorder.release();
-        Log.d(getClass().getTypeName(), "Recording stopped");
-    }
-
-    protected static String getNumber(Call call) {
-        if (call == null) {
-            return null;
-        }
-        if (call.getDetails().getGatewayInfo() != null) {
-            return call.getDetails().getGatewayInfo()
-                    .getOriginalAddress().getSchemeSpecificPart();
-        }
-        Uri handle = getHandle(call);
-        return handle == null ? null : handle.getSchemeSpecificPart();
-    }
-
-    private static Uri getHandle(Call call) {
-        return call == null ? null : call.getDetails().getHandle();
+    public void onFinishedPlaying() {
+        inCallRecorder.startRecording();
     }
 }

@@ -1,72 +1,79 @@
 package com.zutiradio.broadcastos;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
-import android.media.AudioFormat;
-import android.media.AudioTrack;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.TimedMetaData;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class InCallPlayer {
+public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener {
 
     private final Context ctx;
 
-    public InCallPlayer(Context context) {
-        this.ctx = context;
+    @Nullable
+    private final InCallPlayerCallback callback;
+
+    private final String incallMusicBusNumber;
+
+    public InCallPlayer(Context ctx, @NonNull SharedPreferences sharedPreferences, @Nullable InCallPlayerCallback callback) {
+        this.ctx = ctx;
+        this.callback = callback;
+        this.incallMusicBusNumber = sharedPreferences.getString("incall_music_bus_number", "1");
     }
 
-    public void execute() {
-        AudioAttributes attributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
+    public void play(File file) {
+        //maxVolume();
+        MediaPlayer player = new MediaPlayer();
+        player.setAudioAttributes(new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
                 .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
-                .build();
+                .build()
+        );
+        player.setOnPreparedListener(this);
+        player.setOnCompletionListener(this);
 
-        AudioFormat format = new AudioFormat.Builder()
-                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                .setSampleRate(48000)
-                .setChannelMask(AudioFormat.CHANNEL_OUT_STEREO)
-                .build();
+        try {
+            player.setDataSource(ctx, Uri.fromFile(file));
+            player.prepareAsync();
+        } catch (IOException e) {
+            Log.e(getClass().getName(), "Failed to initialize media player.", e);
+        }
+    }
 
-        int bufferSize = AudioTrack.getMinBufferSize(48000, AudioFormat.CHANNEL_OUT_STEREO, AudioFormat.ENCODING_PCM_16BIT);
-
-
-        AudioTrack track = new AudioTrack(attributes, format, bufferSize, AudioTrack.MODE_STREAM, 0);
-
+    @Override
+    public void onPrepared(@NonNull MediaPlayer player) {
         setupAlsa();
-
-        playMessage(track, bufferSize);
-
+        player.start();
         cleanupAlsa();
     }
 
-    private void playMessage(AudioTrack track, int bufferSize) {
-        InputStream inputStream = ctx.getResources().openRawResource(R.raw.zuco_stereo_48k);
-
-        try {
-            inputStream.skip(44); // Blindly assume we need to skip the first 44 bytes of WAV header, TODO: make this smart
-            byte[] buffer = new byte[bufferSize];
-            int readBytesCount;
-
-            track.play();
-            while ((readBytesCount = inputStream.read(buffer)) != -1) {
-                track.write(buffer, 0, readBytesCount);
-            }
-
-            inputStream.close();
-        } catch (IOException e) {
-            Log.e(getClass().getName(), "Failed to manipulate with media resource", e);
-        }
+    @Override
+    public void onCompletion(MediaPlayer player) {
+        if (callback == null) return;
+        callback.onFinishedPlaying();
     }
+
+    /*private void maxVolume() {
+        AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+        int streamType = AudioManager.STREAM_VOICE_CALL;
+        int maxVolume = audioManager.getStreamMaxVolume(streamType);
+        audioManager.setStreamVolume(streamType, maxVolume, 0);
+    }*/
 
     private void setupAlsa() {
         try {
             String result = "";
-            result += runCommand(buildRootTinymixCommand("Incall_Music Audio Mixer MultiMedia1", "1 1"));
+            result += runCommand(buildRootTinymixCommand("Incall_Music Audio Mixer MultiMedia" + incallMusicBusNumber, "1 1"));
             result += runCommand(buildRootTinymixCommand("TX_AIF1_CAP Mixer DEC1", "0"));
             result += runCommand(buildRootTinymixCommand("EAR PA GAIN", "G_0_DB"));
             if (!result.isBlank()) {
@@ -80,7 +87,7 @@ public class InCallPlayer {
     private void cleanupAlsa() {
         try {
             String result = "";
-            result += runCommand(buildRootTinymixCommand("Incall_Music Audio Mixer MultiMedia1", "0 0"));
+            result += runCommand(buildRootTinymixCommand("Incall_Music Audio Mixer MultiMedia" + incallMusicBusNumber, "0 0"));
             result += runCommand(buildRootTinymixCommand("TX_AIF1_CAP Mixer DEC1", "12"));
             result += runCommand(buildRootTinymixCommand("EAR PA GAIN", "G_6_DB"));
             if (!result.isBlank()) {
@@ -111,5 +118,10 @@ public class InCallPlayer {
     @NonNull
     private static String[] buildRootTinymixCommand(@NonNull String name, @NonNull String value) {
         return new String[]{"su", "-c", "/system/bin/com.zutiradio.broadcastos.tinymix", '"' + name + '"', value};
+    }
+
+    public interface InCallPlayerCallback {
+
+        void onFinishedPlaying();
     }
 }

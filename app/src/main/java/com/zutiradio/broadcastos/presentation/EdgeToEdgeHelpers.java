@@ -3,9 +3,9 @@ package com.zutiradio.broadcastos.presentation;
 import android.support.annotation.NonNull;
 import android.view.View;
 
-public class EdgeToEdge {
+public interface EdgeToEdgeHelpers {
 
-    public static void applyInsets(View view) {
+    static void applyInsets(View view) {
         if (view != null) {
             // Ensure drawing behind the system bars
             view.setFitsSystemWindows(false);

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.window.OnBackInvokedCallback;
 
-import com.zutiradio.broadcastos.presentation.EdgeToEdge;
 import com.zutiradio.broadcastos.presentation.preferences.PreferencesPresenter;
 
 public class MainActivity extends Activity {

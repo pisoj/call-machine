@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="preferences_main">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
         android:key="is_answering_machine_enabled"
-        android:title="@string/answer_incoming_calls"
-        android:summaryOn="@string/answering_machine_enabled_message"
-        android:summaryOff="@string/answering_machine_disabled_message" />
+        android:title="@string/call_answering"
+        android:summary="@string/answer_incoming_calls_message"/>
 
     <Preference
         android:key="greeting_audio_file"
         android:title="@string/greeting_audio_file"
         android:summary="@string/no_file_selected" />
+
+    <Preference
+        android:key="timeout_audio_file"
+        android:title="@string/timeout_audio_file"
+        android:summary="@string/no_file_selected" />
+
+    <ListPreference
+        android:key="destination_directory"
+        android:title="@string/destination_directory" />
+
+    <MultiSelectListPreference
+        android:key="allowed_country_codes"
+        android:title="@string/allowed_country_codes"
+        android:summary="@string/all_country_codes_allowed"
+        android:entries="@array/country_code_entries"
+        android:entryValues="@array/country_code_entry_values" />
 
     <ListPreference
         android:key="message_max_duration"
@@ -35,10 +49,10 @@
 
         <ListPreference
             android:key="message_encoding"
-            android:title="@string/format"
+            android:title="@string/codec"
             android:entries="@array/message_encoding_entries"
             android:entryValues="@array/message_encoding_entry_values"
-            android:defaultValue="0/0" />
+            android:defaultValue="7/11" />
 
         <ListPreference
             android:key="message_bitrate"
@@ -52,7 +66,7 @@
             android:title="@string/sample_rate"
             android:entries="@array/message_sample_rate_entries"
             android:entryValues="@array/message_sample_rate_entry_values"
-            android:defaultValue="16000" />
+            android:defaultValue="48000" />
 
     </PreferenceCategory>
 
@@ -63,6 +77,11 @@
             <SwitchPreference
                 android:key="is_wet_radio_uploading_enabled"
                 android:title="@string/upload_messages_to_wet_radio" />
+
+            <SwitchPreference
+                android:key="wet_radio_delete_after_upload"
+                android:title="@string/delete_after_uploading"
+                android:summary="@string/delete_after_uploading_message" />
 
             <EditTextPreference
                 android:key="wet_radio_base_url"
@@ -93,6 +112,13 @@
                 android:selectable="false" />
 
         </PreferenceScreen>
+
+        <ListPreference
+            android:key="incall_music_bus_number"
+            android:title="@string/incall_music_bus_number"
+            android:entries="@array/incall_music_bus_numbers"
+            android:entryValues="@array/incall_music_bus_numbers"
+            android:defaultValue="1" />
 
         <Preference
             android:key="about"

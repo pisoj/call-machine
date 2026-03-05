@@ -1,16 +1,20 @@
 <resources>
     <string name="app_name">BroadcastOS</string>
-    <string name="answer_incoming_calls">Answer incoming calls</string>
-    <string name="answering_machine_enabled_message">Calls will automatically be picked up and answered.</string>
-    <string name="answering_machine_disabled_message">Calls will bypass the answering machine.</string>
+    <string name="call_answering">Call answering</string>
+    <string name="answer_incoming_calls_message">Incoming calls will automatically be answered and recorded as per configuration.</string>
     <string name="greeting_audio_file">Greeting audio file</string>
+    <string name="timeout_audio_file">Timeout audio file</string>
     <string name="no_file_selected">No file selected</string>
+    <string name="destination_directory">Destination directory</string>
     <string name="maximum_message_duration">Maximum message duration</string>
     <string name="cooldown_interval_for_single_caller">Cooldown interval for single caller</string>
     <string name="no_cooldown">No cooldown</string>
     <string name="unlimited">Unlimited</string>
+    <string name="allowed_country_codes">Allowed country codes</string>
+    <string name="all_country_codes_allowed">All country codes are allowed</string>
+    <string name="not_supported_by_selected_codec">Not supported by selected codec</string>
     <string name="message_audio_encoding">Message audio encoding</string>
-    <string name="format">Format</string>
+    <string name="codec">Codec</string>
     <string name="bitrate">Bitrate</string>
     <string name="sample_rate">Sample rate</string>
     <string name="bit_depth">Bit depth</string>
@@ -28,19 +32,29 @@
     <string name="wet_radio_note">If any field other that the two mentioned is marked as "required", uploading will fail.</string>
     <string name="advanced">Advanced</string>
     <string name="about">About</string>
+    <string name="delete_after_uploading">Delete after uploading</string>
+    <string name="delete_after_uploading_message">Remove recording from the device after it has been successfully uploaded.</string>
+    <string name="choose_audio_file">Choose an audio file</string>
+    <string name="greeting_file_does_not_exist">Greeting file does not exist</string>
+    <string name="timeout_file_does_not_exist">Timeout file does not exist</string>
+    <string name="greeting_file_successfully_saved">Greeting file successfully saved</string>
+    <string name="failed_to_save_greeting_file">Failed to save greeting file</string>
+    <string name="timeout_file_successfully_saved">Timeout file successfully saved</string>
+    <string name="failed_to_save_timeout_file">Failed to save timeout file</string>
+    <string name="incall_music_bus_number">Incall music bus number</string>
 
     <string-array name="message_max_duration_entries">
         <item>No limit</item>
-        <item>5s</item>
-        <item>10s</item>
-        <item>15s</item>
-        <item>20s</item>
-        <item>25s</item>
-        <item>30s</item>
-        <item>40s</item>
-        <item>50s</item>
-        <item>60s</item>
-        <item>90s</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>15 seconds</item>
+        <item>20 seconds</item>
+        <item>25 seconds</item>
+        <item>30 seconds</item>
+        <item>40 seconds</item>
+        <item>50 seconds</item>
+        <item>60 seconds</item>
+        <item>90 seconds</item>
         <item>2 minute</item>
         <item>3 minutes</item>
         <item>4 minutes</item>
@@ -93,16 +107,16 @@
 
     <string-array name="message_cooldown_interval_entries">
         <item>Disable cooldown</item>
-        <item>5s</item>
-        <item>10s</item>
-        <item>15s</item>
-        <item>20s</item>
-        <item>25s</item>
-        <item>30s</item>
-        <item>40s</item>
-        <item>50s</item>
-        <item>60s</item>
-        <item>90s</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>15 seconds</item>
+        <item>20 seconds</item>
+        <item>25 seconds</item>
+        <item>30 seconds</item>
+        <item>40 seconds</item>
+        <item>50 seconds</item>
+        <item>60 seconds</item>
+        <item>90 seconds</item>
         <item>2 minutes</item>
         <item>3 minutes</item>
         <item>4 minutes</item>
@@ -128,27 +142,31 @@
     </string-array>
 
     <string-array name="message_encoding_entries">
-        <item>System default</item>
-        <item>OPUS/Ogg</item>
-        <item>OPUS/Webm</item>
-        <item>VORBIS/Ogg</item>
-        <item>AAC/mp4</item>
-        <item>HE AAC/mp4</item>
-        <item>AAC ELD/mp4</item>
-        <item>AMR NB</item>
-        <item>AMR WB</item>
+        <item>Opus / ogg</item>
+        <item>Opus / m4a</item>
+        <item>Opus / webm</item>
+        <item>AAC / m4a</item>
+        <item>AAC / adts</item>
+        <item>HE-AAC v2 / m4a</item>
+        <item>HE-AAC v2 / adts</item>
+        <item>AMR WB / amr</item>
+        <item>AMR WB / 3gpp</item>
+        <item>AMR NB / amr</item>
+        <item>AMR NB / 3gpp</item>
     </string-array>
     <string-array name="message_encoding_entry_values">
         <!-- Do not translate -->
-        <item>0/0</item>
         <item>7/11</item>
+        <item>7/2</item>
         <item>7/9</item>
-        <item>6/11</item>
         <item>3/2</item>
+        <item>3/6</item>
         <item>4/2</item>
-        <item>5/2</item>
-        <item>1/3</item>
+        <item>4/6</item>
         <item>2/4</item>
+        <item>2/1</item>
+        <item>1/3</item>
+        <item>1/1</item>
     </string-array>
 
     <string-array name="message_bitrate_entries">
@@ -190,14 +208,183 @@
     </string-array>
 
     <string-array name="message_sample_rate_entries">
+        <item>System default</item>
         <item>8 kHZ</item>
         <item>16 kHZ</item>
         <item>48 kHZ</item>
     </string-array>
     <string-array name="message_sample_rate_entry_values">
         <!-- Do not translate -->
+        <item>0</item>
         <item>8000</item>
         <item>16000</item>
         <item>48000</item>
+    </string-array>
+    <string-array name="message_sample_rate_entries_he_aac">
+        <item>16 kHZ</item>
+        <item>48 kHZ</item>
+    </string-array>
+    <string-array name="message_sample_rate_entry_values_he_aac">
+        <!-- Do not translate -->
+        <item>16000</item>
+        <item>48000</item>
+    </string-array>
+
+    <string-array name="country_code_entries">
+        <item>+1 (USA/Canada)</item>
+        <item>+7 (Russia/Kazakhstan)</item>
+        <item>+20 (Egypt)</item>
+        <item>+27 (South Africa)</item>
+        <item>+30 (Greece)</item>
+        <item>+31 (Netherlands)</item>
+        <item>+32 (Belgium)</item>
+        <item>+33 (France)</item>
+        <item>+34 (Spain)</item>
+        <item>+36 (Hungary)</item>
+        <item>+39 (Italy)</item>
+        <item>+40 (Romania)</item>
+        <item>+41 (Switzerland)</item>
+        <item>+43 (Austria)</item>
+        <item>+44 (United Kingdom)</item>
+        <item>+45 (Denmark)</item>
+        <item>+46 (Sweden)</item>
+        <item>+47 (Norway)</item>
+        <item>+48 (Poland)</item>
+        <item>+49 (Germany)</item>
+        <item>+52 (Mexico)</item>
+        <item>+54 (Argentina)</item>
+        <item>+55 (Brazil)</item>
+        <item>+60 (Malaysia)</item>
+        <item>+61 (Australia)</item>
+        <item>+62 (Indonesia)</item>
+        <item>+63 (Philippines)</item>
+        <item>+64 (New Zealand)</item>
+        <item>+65 (Singapore)</item>
+        <item>+66 (Thailand)</item>
+        <item>+81 (Japan)</item>
+        <item>+82 (South Korea)</item>
+        <item>+84 (Vietnam)</item>
+        <item>+86 (China)</item>
+        <item>+90 (Turkey)</item>
+        <item>+91 (India)</item>
+        <item>+92 (Pakistan)</item>
+        <item>+94 (Sri Lanka)</item>
+        <item>+95 (Myanmar)</item>
+        <item>+98 (Iran)</item>
+        <item>+212 (Morocco)</item>
+        <item>+213 (Algeria)</item>
+        <item>+216 (Tunisia)</item>
+        <item>+234 (Nigeria)</item>
+        <item>+254 (Kenya)</item>
+        <item>+351 (Portugal)</item>
+        <item>+352 (Luxembourg)</item>
+        <item>+353 (Ireland)</item>
+        <item>+354 (Iceland)</item>
+        <item>+358 (Finland)</item>
+        <item>+359 (Bulgaria)</item>
+        <item>+370 (Lithuania)</item>
+        <item>+371 (Latvia)</item>
+        <item>+372 (Estonia)</item>
+        <item>+380 (Ukraine)</item>
+        <item>+381 (Serbia)</item>
+        <item>+385 (Croatia)</item>
+        <item>+386 (Slovenia)</item>
+        <item>+387 (Bosnia and Herzegovina)</item>
+        <item>+389 (North Macedonia)</item>
+        <item>+420 (Czech Republic)</item>
+        <item>+421 (Slovakia)</item>
+        <item>+852 (Hong Kong)</item>
+        <item>+886 (Taiwan)</item>
+        <item>+961 (Lebanon)</item>
+        <item>+962 (Jordan)</item>
+        <item>+963 (Syria)</item>
+        <item>+964 (Iraq)</item>
+        <item>+965 (Kuwait)</item>
+        <item>+966 (Saudi Arabia)</item>
+        <item>+971 (United Arab Emirates)</item>
+        <item>+972 (Israel)</item>
+        <item>+974 (Qatar)</item>
+    </string-array>
+    <string-array name="country_code_entry_values">
+        <item>1</item>
+        <item>7</item>
+        <item>20</item>
+        <item>27</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>36</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>52</item>
+        <item>54</item>
+        <item>55</item>
+        <item>60</item>
+        <item>61</item>
+        <item>62</item>
+        <item>63</item>
+        <item>64</item>
+        <item>65</item>
+        <item>66</item>
+        <item>81</item>
+        <item>82</item>
+        <item>84</item>
+        <item>86</item>
+        <item>90</item>
+        <item>91</item>
+        <item>92</item>
+        <item>94</item>
+        <item>95</item>
+        <item>98</item>
+        <item>212</item>
+        <item>213</item>
+        <item>216</item>
+        <item>234</item>
+        <item>254</item>
+        <item>351</item>
+        <item>352</item>
+        <item>353</item>
+        <item>354</item>
+        <item>358</item>
+        <item>359</item>
+        <item>370</item>
+        <item>371</item>
+        <item>372</item>
+        <item>380</item>
+        <item>381</item>
+        <item>385</item>
+        <item>386</item>
+        <item>387</item>
+        <item>389</item>
+        <item>420</item>
+        <item>421</item>
+        <item>852</item>
+        <item>886</item>
+        <item>961</item>
+        <item>962</item>
+        <item>963</item>
+        <item>964</item>
+        <item>965</item>
+        <item>966</item>
+        <item>971</item>
+        <item>972</item>
+        <item>974</item>
+    </string-array>
+
+    <string-array name="incall_music_bus_numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>9</item>
     </string-array>
 </resources>
