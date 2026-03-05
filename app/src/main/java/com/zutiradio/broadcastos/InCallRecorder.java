@@ -40,12 +40,9 @@ public class InCallRecorder {
         bitrate = Integer.parseInt(sharedPreferences.getString("message_bitrate", "0"));
         sampleRate = Integer.parseInt(sharedPreferences.getString("message_sample_rate", "0"));
 
-        String phoneNumber = getPhoneNumber(call);
-        String contactName = getContactName(ctx, phoneNumber);
         outputFile = new File(sharedPreferences.getString("destination_directory", ctx.getFilesDir().getAbsolutePath()),
                 ZonedDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd HH-mm-ss"))
-                        + " " + getPhoneNumber(call)
-                        + (contactName != null ? " (" + contactName + ")" : "")
+                        + " " + CallHelpers.getAttribution(ctx, call)
                         + "." + getContainerExtension(containerFormat)
         );
 
@@ -68,10 +65,20 @@ public class InCallRecorder {
         }
     }
 
-    public void stopRecording() {
-        recorder.stop();
+    /**
+     * @return Was something recorded.
+     */
+    public boolean stopRecording() {
+        boolean wasSomethingRecorded = false;
+        try {
+            recorder.stop();
+            wasSomethingRecorded = true;
+            Log.i(getClass().getTypeName(), "Recording stopped");
+        } catch (RuntimeException e) {
+            Log.e(getClass().getName(), "Failed to stop audio recorder.", e);
+        }
         recorder.release();
-        Log.i(getClass().getTypeName(), "Recording stopped");
+        return wasSomethingRecorded;
     }
 
     @NotNull

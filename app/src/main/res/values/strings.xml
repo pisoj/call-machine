@@ -41,6 +41,12 @@
     <string name="failed_to_save_greeting_file">Failed to save greeting file</string>
     <string name="timeout_file_successfully_saved">Timeout file successfully saved</string>
     <string name="failed_to_save_timeout_file">Failed to save timeout file</string>
+    <string name="wet_radio_uploading_failed_with_status_code_x">WetRadio uploading failed with status code %s</string>
+    <string name="wet_radio_uploading_failed_message">WetRadio uploading failed, see last response for details</string>
+    <string name="wet_radio_uploading_service">WetRadio uploading service</string>
+    <string name="no_response_saved_yet">No response saved yet</string>
+    <string name="last_modified_x">Last modified: %s</string>
+    <string name="open_last_server_response_in_browser">Open last server response in browser</string>
     <string name="incall_music_bus_number">Incall music bus number</string>
 
     <string-array name="message_max_duration_entries">

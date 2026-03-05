@@ -31,7 +31,6 @@
     <ListPreference
         android:key="message_max_duration"
         android:title="@string/maximum_message_duration"
-        android:summary="60s"
         android:entries="@array/message_max_duration_entries"
         android:entryValues="@array/message_max_duration_entry_values"
         android:defaultValue="60" />
@@ -106,6 +105,10 @@
                 android:key="wet_radio_privileged_sender_token"
                 android:title="@string/privileged_sender_token"
                 android:summary="@string/privileged_sender_token_message" />
+
+            <Preference
+                android:key="wet_radio_open_last_server_response"
+                android:title="@string/open_last_server_response_in_browser" />
 
             <Preference
                 android:summary="@string/wet_radio_note"

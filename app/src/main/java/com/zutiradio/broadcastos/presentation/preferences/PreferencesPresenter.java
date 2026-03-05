@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
@@ -18,13 +19,19 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.zutiradio.broadcastos.FileHelpers;
 import com.zutiradio.broadcastos.R;
+import com.zutiradio.broadcastos.WetRadioUploader;
+import com.zutiradio.broadcastos.files.FileHelpers;
+import com.zutiradio.broadcastos.files.FileProvider;
 import com.zutiradio.broadcastos.presentation.message.MessagePresenter;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -67,6 +74,11 @@ public class PreferencesPresenter extends EdgeToEdgePreferenceFragment implement
                     .replace(R.id.fragment_container_view, new MessagePresenter())
                     .addToBackStack(null)
                     .commit();
+        } else if (key.equals("wet_radio_open_last_server_response")) {
+            File file = WetRadioUploader.getLastResponseFile(getContext());
+            if (file.exists()) {
+                FileProvider.openHtmlFromPrivateCache(getContext(), WetRadioUploader.LAST_RESPONSE_FILE_NAME);
+            }
         }
         return result;
     }
@@ -203,6 +215,21 @@ public class PreferencesPresenter extends EdgeToEdgePreferenceFragment implement
             case "timeout_audio_file":
                 pref.setSummary(getPreferenceManager().getSharedPreferences().getString(key, (String) getText(R.string.no_file_selected)));
                 break;
+            case "wet_radio_open_last_server_response":
+                File file = WetRadioUploader.getLastResponseFile(getContext());
+                if (file.exists()) {
+                    pref.setSummary(getString(R.string.last_modified_x, DateTimeFormatter
+                            .ofLocalizedDateTime(FormatStyle.SHORT)
+                            .withZone(ZoneId.systemDefault())
+                            .format(Instant.ofEpochMilli(file.lastModified()))
+                    ));
+                } else {
+                    pref.setSummary(R.string.no_response_saved_yet);
+                }
+                break;
+            case "wet_radio_base_url":
+                EditTextPreference preference = (EditTextPreference) pref;
+                preference.setSummary(preference.getText());
         }
     }
 

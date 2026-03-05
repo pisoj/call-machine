@@ -3,9 +3,9 @@ package com.zutiradio.broadcastos;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
+import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.TimedMetaData;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +25,8 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
     private final String incallMusicBusNumber;
 
+    private MediaPlayer player;
+
     public InCallPlayer(Context ctx, @NonNull SharedPreferences sharedPreferences, @Nullable InCallPlayerCallback callback) {
         this.ctx = ctx;
         this.callback = callback;
@@ -32,11 +34,13 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void play(File file) {
-        //maxVolume();
+        maxVolume();
         MediaPlayer player = new MediaPlayer();
         player.setAudioAttributes(new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                .setUsage(AudioAttributes.USAGE_MEDIA) // Must be used in order to route to the incall_music sink
                 .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
+                // Bypass ducking wne on call
+                .setFlags(0x1 << 6) // AudioAttributes.FLAG_BYPASS_INTERRUPTION_POLICY - Flag requesting audible playback even under limited interruptions.
                 .build()
         );
         player.setOnPreparedListener(this);
@@ -45,6 +49,7 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         try {
             player.setDataSource(ctx, Uri.fromFile(file));
             player.prepareAsync();
+            this.player = player;
         } catch (IOException e) {
             Log.e(getClass().getName(), "Failed to initialize media player.", e);
         }
@@ -54,21 +59,33 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     public void onPrepared(@NonNull MediaPlayer player) {
         setupAlsa();
         player.start();
+    }
+
+    public void stop() {
+        if (player == null) return;
+        player.stop();
+    }
+
+    private void cleanup() {
+        player.release();
+        this.player = null;
         cleanupAlsa();
     }
 
     @Override
-    public void onCompletion(MediaPlayer player) {
+    public void onCompletion(@NonNull MediaPlayer player) {
+        cleanup();
         if (callback == null) return;
         callback.onFinishedPlaying();
     }
 
-    /*private void maxVolume() {
-        AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-        int streamType = AudioManager.STREAM_VOICE_CALL;
-        int maxVolume = audioManager.getStreamMaxVolume(streamType);
-        audioManager.setStreamVolume(streamType, maxVolume, 0);
-    }*/
+    private void maxVolume() {
+        for (int streamType: new int[]{AudioManager.STREAM_MUSIC, AudioManager.STREAM_VOICE_CALL}) {
+            AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
+            int maxVolume = audioManager.getStreamMaxVolume(streamType);
+            audioManager.setStreamVolume(streamType, maxVolume, 0);
+        }
+    }
 
     private void setupAlsa() {
         try {
@@ -88,7 +105,7 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         try {
             String result = "";
             result += runCommand(buildRootTinymixCommand("Incall_Music Audio Mixer MultiMedia" + incallMusicBusNumber, "0 0"));
-            result += runCommand(buildRootTinymixCommand("TX_AIF1_CAP Mixer DEC1", "12"));
+            result += runCommand(buildRootTinymixCommand("TX_AIF1_CAP Mixer DEC1", "1"));
             result += runCommand(buildRootTinymixCommand("EAR PA GAIN", "G_6_DB"));
             if (!result.isBlank()) {
                 Log.i(getClass().getName(), "ALSA cleanup result:\n" + result);

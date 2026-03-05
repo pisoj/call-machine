@@ -14,6 +14,16 @@ import org.jetbrains.annotations.NotNull;
 
 public interface CallHelpers {
 
+    /**
+     * @return a string formatted like +12345 (Contact Name If Contact Exists)
+     */
+    @NotNull
+    static String getAttribution(@NotNull Context ctx, @NotNull Call call) {
+        String phoneNumber = getPhoneNumber(call);
+        String contactName = getContactName(ctx, phoneNumber);
+        return phoneNumber + (contactName != null ? " (" + contactName + ")" : "");
+    }
+
     @NotNull
     static String getPhoneNumber(@NotNull Call call) {
         if (call.getDetails().getGatewayInfo() != null) {

@@ -1,6 +1,8 @@
 package com.zutiradio.broadcastos.presentation.message;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 
 import com.zutiradio.broadcastos.BuildConfig;
 import com.zutiradio.broadcastos.InCallPlayer;
+
+import java.io.File;
 
 public class MessagePresenter extends Fragment implements MessageViewMvp.Listener {
 
@@ -29,6 +33,8 @@ public class MessagePresenter extends Fragment implements MessageViewMvp.Listene
 
     @Override
     public void onPlayNowClicked() {
+        InCallPlayer icp = new InCallPlayer(getContext(), getContext().getSharedPreferences(getContext().getPackageName()+"_preferences", Context.MODE_PRIVATE), null);
+        icp.play(new File(getContext().getFilesDir(), "greeting"));
     }
 
     @Override
