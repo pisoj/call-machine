@@ -5,6 +5,9 @@ import static com.zutiradio.broadcastos.CallHelpers.getPhoneNumber;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.telecom.Call;
 import android.telecom.VideoProfile;
@@ -56,6 +59,8 @@ class CallCallbackHandler extends Call.Callback implements InCallPlayer.InCallPl
 
     private final Context ctx;
 
+    private final Call call;
+
     private final InCallRecorder inCallRecorder;
 
     private final InCallPlayer inCallPlayer;
@@ -63,10 +68,16 @@ class CallCallbackHandler extends Call.Callback implements InCallPlayer.InCallPl
     @Nullable
     private final WetRadioUploader wetRadioUploader;
 
+    @Nullable
     private final File greeting;
+
+    private boolean hasTimeoutElapsed = false;
+    @Nullable
+    private final Thread timeoutThread;
 
     CallCallbackHandler(Context ctx, SharedPreferences sharedPreferences, Call call) {
         this.ctx = ctx;
+        this.call = call;
         this.inCallRecorder = new InCallRecorder(ctx, sharedPreferences, call);
         this.inCallPlayer = new InCallPlayer(ctx, sharedPreferences, this);
         
@@ -94,6 +105,35 @@ class CallCallbackHandler extends Call.Callback implements InCallPlayer.InCallPl
             Toast.makeText(ctx, R.string.greeting_file_does_not_exist, Toast.LENGTH_LONG).show();
             this.greeting = null;
         }
+
+
+        int timeoutSec = Integer.parseInt(sharedPreferences.getString("message_max_duration", "0"));
+        if (timeoutSec > 0) {
+            File timeoutFile = new File(ctx.getFilesDir(), "timeout");
+            this.timeoutThread = new Thread(() -> {
+                for (int timeout = timeoutSec; timeout > 0; timeout--) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                this.hasTimeoutElapsed = true;
+                if (timeoutFile.exists()) {
+                    this.inCallPlayer.play(timeoutFile);
+                } else {
+                    new Handler(Looper.getMainLooper()) {
+                        @Override
+                        public void handleMessage(@NonNull Message message) {
+                            Toast.makeText(ctx, R.string.timeout_file_does_not_exist, Toast.LENGTH_LONG).show();
+                        }
+                    };
+                    call.disconnect();
+                }
+            });
+        } else {
+            this.timeoutThread = null;
+        }
     }
 
     @Override
@@ -104,11 +144,12 @@ class CallCallbackHandler extends Call.Callback implements InCallPlayer.InCallPl
                 if (greeting != null) {
                     inCallPlayer.play(greeting);
                 } else {
-                    inCallRecorder.startRecording();
+                    startRecording();
                 }
                 break;
             case Call.STATE_DISCONNECTED:
                 inCallPlayer.stop();
+                inCallPlayer.cleanup();
                 boolean wasSomethingRecorded = inCallRecorder.stopRecording();
                 if (wetRadioUploader != null && wasSomethingRecorded) {
                     Intent intent = new Intent(ctx, WetRadioUploadService.class);
@@ -117,12 +158,22 @@ class CallCallbackHandler extends Call.Callback implements InCallPlayer.InCallPl
                     intent.putExtra(WetRadioUploadService.EXTRA_ATTRIBUTION, CallHelpers.getAttribution(ctx, call));
                     ctx.startService(intent);
                 }
+                if (timeoutThread != null) timeoutThread.interrupt();
                 break;
         }
     }
 
     @Override
     public void onFinishedPlaying() {
+        if (hasTimeoutElapsed) {
+            call.disconnect();
+        } else {
+            startRecording();
+        }
+    }
+
+    private void startRecording() {
         inCallRecorder.startRecording();
+        if (timeoutThread != null) timeoutThread.start();
     }
 }

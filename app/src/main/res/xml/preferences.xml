@@ -35,13 +35,14 @@
         android:entryValues="@array/message_max_duration_entry_values"
         android:defaultValue="60" />
 
-    <ListPreference
+    <!-- TODO: implement single caller cooldown -->
+    <!--ListPreference
         android:key="message_cooldown_interval"
         android:title="@string/cooldown_interval_for_single_caller"
         android:summary="@string/no_cooldown"
         android:entries="@array/message_cooldown_interval_entries"
         android:entryValues="@array/message_cooldown_interval_entry_values"
-        android:defaultValue="0" />
+        android:defaultValue="0" /-->
 
     <PreferenceCategory
         android:title="@string/message_audio_encoding">

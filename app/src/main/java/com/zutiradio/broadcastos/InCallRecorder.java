@@ -76,8 +76,9 @@ public class InCallRecorder {
             Log.i(getClass().getTypeName(), "Recording stopped");
         } catch (RuntimeException e) {
             Log.e(getClass().getName(), "Failed to stop audio recorder.", e);
+        } finally {
+            recorder.release();
         }
-        recorder.release();
         return wasSomethingRecorded;
     }
 

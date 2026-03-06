@@ -64,17 +64,18 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     public void stop() {
         if (player == null) return;
         player.stop();
-    }
-
-    private void cleanup() {
         player.release();
         this.player = null;
+    }
+
+    public void cleanup() {
         cleanupAlsa();
     }
 
     @Override
     public void onCompletion(@NonNull MediaPlayer player) {
-        cleanup();
+        player.release();
+        this.player = null;
         if (callback == null) return;
         callback.onFinishedPlaying();
     }
