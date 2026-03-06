@@ -115,7 +115,8 @@ class CallCallbackHandler extends Call.Callback implements InCallPlayer.InCallPl
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        Log.i(getClass().getName(), "Timeout counter thread interupted.", e);
+                        return;
                     }
                 }
                 this.hasTimeoutElapsed = true;
