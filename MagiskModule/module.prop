@@ -1,0 +1,6 @@
+id=call_machine
+name=Call Machine
+version=v0.0.28
+versionCode=28
+author=Žuti Radio
+description=Answers calls automatically with custom greeting audio. Offers to limit single message duration to prevent one caller from hoggin the phone line.

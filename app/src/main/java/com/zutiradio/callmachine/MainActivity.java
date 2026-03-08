@@ -1,5 +1,6 @@
 package com.zutiradio.callmachine;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.os.Build;
@@ -28,14 +29,10 @@ public class MainActivity extends Activity {
 
     private void registerOnBackInvokedCallback() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return;
-        getOnBackInvokedDispatcher().registerOnBackInvokedCallback(0, new OnBackInvokedCallback() {
-            @Override
-            public void onBackInvoked() {
-                onBackPressed();
-            }
-        });
+        getOnBackInvokedDispatcher().registerOnBackInvokedCallback(0, this::onBackPressed);
     }
 
+    @SuppressLint("GestureBackNavigation")
     @Override
     public void onBackPressed() {
         FragmentManager fragmentManager = getFragmentManager();
