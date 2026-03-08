@@ -5,26 +5,23 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
-    <queries>
-        <package android:name="android" />
-    </queries>
     <attribution android:tag="incall_music" android:label="@string/app_name" />
 
+    <!-- To record phone call audio -->
     <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT"
         tools:ignore="ProtectedPermissions" />
+
+    <!-- Do get notified when phone call starts/ends -->
     <uses-permission android:name="android.permission.CONTROL_INCALL_EXPERIENCE"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-    <uses-permission android:name="android.permission.CALL_AUDIO_INTERCEPTION"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_ROUTING"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.CALL_AUDIO_INTERCEPTION"
-        tools:ignore="ProtectedPermissions" />
+
+    <!-- To include contact name in file names -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <!-- To upload recordings to WetRadio -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- For starting WetRadio Upload service -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"
         tools:ignore="ForegroundServicesPolicy" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
@@ -34,7 +31,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BroadcastOS"
+        android:theme="@style/Theme.CallMachine"
         android:usesCleartextTraffic="true">
 
         <activity
@@ -50,14 +47,6 @@
         <service android:name=".call.InCallService"
             android:permission="android.permission.BIND_INCALL_SERVICE"
             android:exported="true">
-            <!-- See https://android.googlesource.com/platform/frameworks/base/+/master/telecomm/java/android/telecom/TelecomManager.java for meta-data constants -->
-            <!-- Make us manage ringing so we can silence the call that is being auto-answered, TODO: Check is this actually necessary -->
-            <meta-data android:name="android.telecom.IN_CALL_SERVICE_RINGING" android:value="true" />
-            <!-- TODO: Check what this actually does (hypothesis: it informs us of e.g. WhatsApp calls) -->
-            <meta-data android:name="android.telecom.METADATA_INCLUDE_EXTERNAL_CALLS" android:value="true" />
-            <!-- TODO: Check what this actually does (hypothesis: it let's us control the state of e.g. WhatsApp calls) -->
-            <meta-data android:name="android.telecom.METADATA_INCLUDE_SELF_MANAGED_CALLS" android:value="true" />
-
             <intent-filter>
                 <action android:name="android.telecom.InCallService"/>
             </intent-filter>

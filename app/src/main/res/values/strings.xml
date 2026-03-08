@@ -29,7 +29,7 @@
     <string name="attribution_field_index_message">The index of a text field that will be populated with the phone number and the name of the contact (if the caller is in contacts).</string>
     <string name="privileged_sender_token">Privileged sender token</string>
     <string name="privileged_sender_token_message">Bypasses the timeout imposed by Wet Radio after sending each recording. Also allows using a disabled send type.</string>
-    <string name="wet_radio_note">If any field other that the two mentioned is marked as "required", uploading will fail.</string>
+    <string name="wet_radio_note">If any field other that the two mentioned is marked as "required", uploading will fail. Https and following redirects are NOT supported currently.</string>
     <string name="advanced">Advanced</string>
     <string name="about">About</string>
     <string name="delete_after_uploading">Delete after uploading</string>

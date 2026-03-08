@@ -36,10 +36,10 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         maxVolume();
         MediaPlayer player = new MediaPlayer();
         player.setAudioAttributes(new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA) // Must be used in order to route to the incall_music sink
+                .setUsage(AudioAttributes.USAGE_MEDIA) // Must be USAGE_MEDIA in order to route to the incall_music sink
                 .setContentType(AudioAttributes.CONTENT_TYPE_UNKNOWN)
-                // Bypass ducking wne on call
-                .setFlags(0x1 << 6) // AudioAttributes.FLAG_BYPASS_INTERRUPTION_POLICY - Flag requesting audible playback even under limited interruptions.
+                // Bypass ducking during call of what system thinks is music because we've set USAGE_MEDIA
+                .setFlags(0x1 << 6) // AudioAttributes.FLAG_BYPASS_INTERRUPTION_POLICY - Flag requesting audible playback even under limited interruptions., marked with @hide
                 .build()
         );
         player.setOnPreparedListener(this);
@@ -80,6 +80,7 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     private void maxVolume() {
+        // System volume effects how loud will the message be at the other end
         for (int streamType: new int[]{AudioManager.STREAM_MUSIC, AudioManager.STREAM_VOICE_CALL}) {
             AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
             int maxVolume = audioManager.getStreamMaxVolume(streamType);
@@ -90,9 +91,10 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     private void setupAlsa() {
         try {
             String result = "";
-            result += runCommand(buildRootTinymixCommand("Incall_Music Audio Mixer MultiMedia" + incallMusicBusNumber, "1 1"));
-            result += runCommand(buildRootTinymixCommand("TX_AIF1_CAP Mixer DEC1", "0"));
-            result += runCommand(buildRootTinymixCommand("EAR PA GAIN", "G_0_DB"));
+            result += runCommand(buildRootTinymixCommand("Incall_Music Audio Mixer MultiMedia" + incallMusicBusNumber, "1 1")); // Forward playing media to phone call
+            result += runCommand(buildRootTinymixCommand("TX_AIF1_CAP Mixer DEC1", "0")); // Mute the microphone
+            // I haven't found a setting to completely silence the earpiece while still being abe to record call audio
+            result += runCommand(buildRootTinymixCommand("EAR PA GAIN", "G_0_DB")); // At least try to lower the gain so earpiece isn't as loud
             if (!result.isBlank()) {
                 Log.i(getClass().getName(), "ALSA setup result:\n" + result);
             }
@@ -134,7 +136,7 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
     @NonNull
     private static String[] buildRootTinymixCommand(@NonNull String name, @NonNull String value) {
-        return new String[]{"su", "-c", "/system/bin/com.zutiradio.broadcastos.tinymix", '"' + name + '"', value};
+        return new String[]{"su", "-c", "/system/bin/com.zutiradio.callmachine.tinymix", '"' + name + '"', value};
     }
 
     public interface InCallPlayerCallback {
