@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+MagiskModule/system/priv-app/CallMachine/CallMachine.apk
