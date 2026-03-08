@@ -47,7 +47,7 @@
     <string name="no_response_saved_yet">No response saved yet</string>
     <string name="last_modified_x">Last modified: %s</string>
     <string name="open_last_server_response_in_browser">Open last server response in browser</string>
-    <string name="incall_music_bus_number">Incall music bus number</string>
+    <string name="incall_music_bus_number">Incall music bus number (do not change)</string>
 
     <string-array name="message_max_duration_entries">
         <item>No limit</item>

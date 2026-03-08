@@ -12,6 +12,9 @@
 - Saving recorded messages on **SD card or Internal storage** and even in app's private directory in **`/data` partition**
 - Can upload messages to a self-hosted [WetRadio](https://github.com/pisoj/WetRadio) instance.
 
+If you desire the app to include **contact name** in **file names** of recorded messages, please
+**manually** grant contacts permission **in settings**.
+
 > **Warning:**
 >
 > This has **only been tested** on Xiaomi Redmi Note 8T running LineageOS 23.2 (Android 16)
