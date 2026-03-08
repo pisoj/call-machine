@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BroadcastOS</string>
+    <string name="app_name">Call Machine</string>
     <string name="call_answering">Call answering</string>
     <string name="answer_incoming_calls_message">Incoming calls will automatically be answered and recorded as per configuration.</string>
     <string name="greeting_audio_file">Greeting audio file</string>

@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "BroadcastOS"
+rootProject.name = "Call Machine"
 include(":app")
  

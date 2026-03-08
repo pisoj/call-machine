@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.zutiradio.broadcastos"
+    namespace = "com.zutiradio.callmachine"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -11,11 +11,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.zutiradio.broadcastos"
+        applicationId = "com.zutiradio.callmachine"
         minSdk = 29
         targetSdk = 36
-        versionCode = 26
-        versionName = "0.0.26"
+        versionCode = 27
+        versionName = "0.0.27"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,7 +27,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -40,6 +41,4 @@ android {
     }
 }
 
-dependencies {
-    testImplementation(libs.junit)
-}
+dependencies {}
