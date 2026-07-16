@@ -29,6 +29,13 @@
         android:entryValues="@array/country_code_entry_values" />
 
     <ListPreference
+        android:key="delay_before_answering"
+        android:title="@string/delay_before_answering"
+        android:entries="@array/delay_before_answering_entries"
+        android:entryValues="@array/delay_before_answering_entry_values"
+        android:defaultValue="20" />
+
+    <ListPreference
         android:key="message_max_duration"
         android:title="@string/maximum_message_duration"
         android:entries="@array/message_max_duration_entries"
