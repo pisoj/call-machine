@@ -187,6 +187,7 @@ public class PreferencesPresenter extends EdgeToEdgePreferenceFragment implement
     private void setPreferenceSummary(@NotNull Preference pref, @NotNull String key) {
         switch (key) {
             case "destination_directory":
+            case "delay_before_answering":
             case "message_max_duration":
             case "message_cooldown_interval":
             case "message_encoding":

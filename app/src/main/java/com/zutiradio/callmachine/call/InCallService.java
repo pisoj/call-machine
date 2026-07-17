@@ -34,8 +34,37 @@ public class InCallService extends android.telecom.InCallService {
                 sharedPreferences.getStringSet("allowed_country_codes", Set.of()),
                 sharedPreferences.getBoolean("is_answering_machine_enabled", false))) return;
 
-        call.registerCallback(new CallCallbackHandler(getApplicationContext(), sharedPreferences, call));
-        call.answer(VideoProfile.STATE_AUDIO_ONLY);
+        processCall(
+                call,
+                Integer.parseInt(sharedPreferences.getString("delay_before_answering", "20")),
+                new CallCallbackHandler(getApplicationContext(), sharedPreferences, call)
+        );
+    }
+
+    private void processCall(@NonNull Call call, int delayBeforeAnswering, Call.Callback callCallback) {
+        if (delayBeforeAnswering == 0) {
+            // Answer right away without launching any new threads
+            call.registerCallback(callCallback);
+            call.answer(VideoProfile.STATE_AUDIO_ONLY);
+            return;
+        }
+        new Thread(() -> {
+            for (int countdown = delayBeforeAnswering; countdown > 0; countdown--) {
+                try {
+                    Thread.sleep(1000);
+                    if (call.getState() != Call.STATE_RINGING) {
+                        throw new InterruptedException();
+                    }
+                } catch (InterruptedException e) {
+                    Log.i(InCallService.class.getName(), "Answering machine interrupted.", e);
+                    return;
+                }
+            }
+            getApplicationContext().getMainExecutor().execute(() -> {
+                call.registerCallback(callCallback);
+                call.answer(VideoProfile.STATE_AUDIO_ONLY);
+            });
+        }).start();
     }
 
     /**

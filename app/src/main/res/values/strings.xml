@@ -7,6 +7,7 @@
     <string name="no_file_selected">No file selected</string>
     <string name="destination_directory">Destination directory</string>
     <string name="maximum_message_duration">Maximum message duration</string>
+    <string name="delay_before_answering">Delay before answering</string>
     <string name="cooldown_interval_for_single_caller">Cooldown interval for single caller</string>
     <string name="no_cooldown">No cooldown</string>
     <string name="unlimited">Unlimited</string>
@@ -48,6 +49,52 @@
     <string name="last_modified_x">Last modified: %s</string>
     <string name="open_last_server_response_in_browser">Open last server response in browser</string>
     <string name="incall_music_bus_number">Incall music bus number (do not change)</string>
+
+    <string-array name="delay_before_answering_entries">
+        <item>No delay</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+        <item>15 seconds</item>
+        <item>20 seconds</item>
+        <item>25 seconds</item>
+        <item>30 seconds</item>
+        <item>40 seconds</item>
+        <item>50 seconds</item>
+        <item>60 seconds</item>
+        <item>90 seconds</item>
+        <item>2 minute</item>
+        <item>3 minutes</item>
+        <item>4 minutes</item>
+        <item>5 minutes</item>
+        <item>6 minutes</item>
+        <item>7 minutes</item>
+        <item>8 minutes</item>
+        <item>9 minutes</item>
+        <item>10 minutes</item>
+    </string-array>
+    <string-array name="delay_before_answering_entry_values">
+        <!-- Do not translate -->
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>90</item>
+        <item>120</item>
+        <item>180</item>
+        <item>240</item>
+        <item>300</item>
+        <item>360</item>
+        <item>420</item>
+        <item>480</item>
+        <item>540</item>
+        <item>600</item>
+    </string-array>
 
     <string-array name="message_max_duration_entries">
         <item>No limit</item>
