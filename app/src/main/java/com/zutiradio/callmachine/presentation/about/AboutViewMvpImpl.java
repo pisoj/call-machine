@@ -13,9 +13,9 @@ public class AboutViewMvpImpl implements AboutViewMvp {
     public AboutViewMvpImpl(LayoutInflater inflater, ViewGroup container, AboutViewMvp.Listener listener) {
         b = ScreenAboutBinding.inflate(inflater, container, false);
 
-        b.getVersionBtn.setOnClickListener(view -> listener.onGetVersionClicked());
-        b.playNowBtn.setOnClickListener(view -> listener.onPlayNowClicked());
-        b.donow.setOnClickListener(view -> listener.onDoNowClicked());
+        b.versionBtn.setOnClickListener(view -> listener.onGetVersionClicked());
+        b.playGreetingBtn.setOnClickListener(view -> listener.onPlayGreetingClicked());
+        b.testRootBtn.setOnClickListener(view -> listener.onTestRootClicked());
     }
 
     @Override
@@ -24,12 +24,18 @@ public class AboutViewMvpImpl implements AboutViewMvp {
     }
 
     @Override
-    public void hideUpdateButton() {
-        b.getVersionBtn.setVisibility(View.INVISIBLE);
+    public void hideVersionButton() {
+        b.versionBtn.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    public void setMessage(String msg) {
-        b.textView.setText(msg);
+    public void setVersionText(String msg) {
+        b.versionTv.setText(msg);
+    }
+
+    @Override
+    public void setTestRootResult(String msg, boolean isSuccess) {
+        b.testRootTv.setText(msg);
+        b.testRootContainer.setBackgroundColor(isSuccess ? 0xFF4CAF50 : 0xFFD33C31);
     }
 }

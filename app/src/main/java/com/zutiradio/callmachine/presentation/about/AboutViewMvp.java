@@ -11,12 +11,14 @@ public interface AboutViewMvp extends ViewMvp {
     interface Listener {
         void onGetVersionClicked();
 
-        void onPlayNowClicked();
+        void onPlayGreetingClicked();
 
-        void onDoNowClicked();
+        void onTestRootClicked();
     }
 
-    void hideUpdateButton();
+    void hideVersionButton();
 
-    void setMessage(String msg);
+    void setVersionText(String msg);
+
+    void setTestRootResult(String msg, boolean isSuccess);
 }

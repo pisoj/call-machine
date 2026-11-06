@@ -3,50 +3,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/versionTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="false"
         android:layout_marginTop="112dp"
-        android:layout_toStartOf="@+id/getVersionBtn"
-        android:layout_toLeftOf="@+id/getVersionBtn"
+        android:layout_marginStart="16dp"
+        android:layout_toStartOf="@+id/versionBtn"
+        android:layout_toLeftOf="@+id/versionBtn"
         android:text="@string/app_name" />
 
     <Button
-        android:id="@+id/getVersionBtn"
+        android:id="@+id/versionBtn"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_alignParentTop="false"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="96dp"
+        android:layout_marginEnd="8dp"
         android:layout_alignParentRight="false"
         android:layout_alignParentBottom="false"
         android:text="Display version" />
 
     <Button
-        android:id="@+id/playNowBtn"
+        android:id="@+id/playGreetingBtn"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_below="@+id/getVersionBtn"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_below="@+id/versionBtn"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="99dp"
-        android:layout_marginEnd="-1dp"
-        android:text="Play now" />
+        android:text="Play greeting" />
 
     <Button
-        android:id="@+id/donow"
+        android:id="@+id/testRootBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playNowBtn"
-        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_alignTop="@+id/playGreetingBtn"
         android:layout_alignParentEnd="true"
-        android:text="Does nothing" />
+        android:layout_toEndOf="@+id/playGreetingBtn"
+        android:text="Test Root" />
+
+    <FrameLayout
+        android:id="@+id/testRootContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playGreetingBtn"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/testRootTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="#000"
+            android:textIsSelectable="true" />
+
+    </FrameLayout>
 
 </RelativeLayout>

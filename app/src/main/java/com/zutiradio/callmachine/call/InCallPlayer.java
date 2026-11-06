@@ -117,17 +117,22 @@ public class InCallPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         }
     }
 
-    private static String runCommand(@NonNull String... cmd) throws IOException, InterruptedException {
+    public static String runCommand(@NonNull String... cmd) throws IOException, InterruptedException {
         Process process = Runtime.getRuntime().exec(cmd);
-        BufferedReader in = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        BufferedReader stderr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        BufferedReader stdout = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
         String output = "";
         String inputLine;
-        while ((inputLine = in.readLine()) != null) {
+        while ((inputLine = stderr.readLine()) != null) {
+            output += inputLine + '\n';
+        }
+        while ((inputLine = stdout.readLine()) != null) {
             output += inputLine + '\n';
         }
 
-        in.close();
+        stderr.close();
+        stdout.close();
         process.waitFor();
         process.destroy();
 
