@@ -5,17 +5,17 @@ plugins {
 android {
     namespace = "com.zutiradio.callmachine"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
+        version = release(37) {
+            minorApiLevel = 2
         }
     }
 
     defaultConfig {
         applicationId = "com.zutiradio.callmachine"
         minSdk = 29
-        targetSdk = 36
-        versionCode = 30
-        versionName = "0.1.1"
+        targetSdk = 37
+        versionCode = 31
+        versionName = "0.1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
