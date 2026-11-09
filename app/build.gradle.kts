@@ -20,6 +20,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    packaging {
+        resources {
+            // Prevent the Kotlin standard library from being included in the builds,
+            // this project does not use Kotlin
+            excludes += "kotlin/**"
+        }
+    }
+
     buildFeatures {
         buildConfig = true
         viewBinding = true
