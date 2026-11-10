@@ -21,6 +21,13 @@
         android:key="destination_directory"
         android:title="@string/destination_directory" />
 
+    <ListPreference
+        android:key="contacts_policy"
+        android:title="@string/contacts_policy"
+        android:entries="@array/contacts_policy_entries"
+        android:entryValues="@array/contacts_policy_entry_values"
+        android:defaultValue="0" />
+
     <MultiSelectListPreference
         android:key="allowed_country_codes"
         android:title="@string/allowed_country_codes"

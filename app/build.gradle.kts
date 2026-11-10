@@ -14,8 +14,8 @@ android {
         applicationId = "com.zutiradio.callmachine"
         minSdk = 29
         targetSdk = 37
-        versionCode = 31
-        versionName = "0.1.2"
+        versionCode = 32
+        versionName = "0.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

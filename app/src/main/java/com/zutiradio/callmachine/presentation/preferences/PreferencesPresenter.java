@@ -1,8 +1,11 @@
 package com.zutiradio.callmachine.presentation.preferences;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,16 +17,17 @@ import android.preference.PreferenceGroup;
 import android.preference.PreferenceScreen;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.zutiradio.callmachine.R;
-import com.zutiradio.callmachine.wetradio.WetRadioUploader;
 import com.zutiradio.callmachine.files.FileHelpers;
 import com.zutiradio.callmachine.files.FileProvider;
 import com.zutiradio.callmachine.presentation.about.AboutPresenter;
+import com.zutiradio.callmachine.wetradio.WetRadioUploader;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,6 +44,10 @@ public class PreferencesPresenter extends EdgeToEdgePreferenceFragment implement
     private static final int GREETING_FILE_REQUEST_CODE = 1;
     private static final int TIMEOUT_FILE_REQUEST_CODE = 2;
 
+    public static final int CONTACTS_POLICY_ONLY_KNOWN_NUMBERS = 3;
+
+    public static final int CONTACTS_POLICY_ONLY_UNKNOWN_NUMBERS = 4;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +56,7 @@ public class PreferencesPresenter extends EdgeToEdgePreferenceFragment implement
         initPreferenceValues();
         adjustSupportedSampleRates();
         initPreferenceSummaries(getPreferenceScreen());
+        askForContactsPermissionIfNeeded();
     }
 
     @Override
@@ -86,8 +95,14 @@ public class PreferencesPresenter extends EdgeToEdgePreferenceFragment implement
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) return;
 
+        if (requestCode == CONTACTS_POLICY_ONLY_KNOWN_NUMBERS || requestCode == CONTACTS_POLICY_ONLY_UNKNOWN_NUMBERS) {
+            if (getContext().checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED) return;
+            ListPreference preference = (ListPreference) getPreferenceScreen().findPreference("contacts_policy");
+            preference.setValue(String.valueOf(requestCode));
+        }
+
+        if (resultCode != Activity.RESULT_OK) return;
         if (requestCode == GREETING_FILE_REQUEST_CODE || requestCode == TIMEOUT_FILE_REQUEST_CODE) {
             Uri uri = data.getData();
             String fileName = getFileNameFromContentProvider(uri);
@@ -135,6 +150,47 @@ public class PreferencesPresenter extends EdgeToEdgePreferenceFragment implement
         if (key == null) return;
         setPreferenceSummary(key);
         if (key.equals("message_encoding")) adjustSupportedSampleRates();
+        else if (key.equals("contacts_policy")) askForContactsPermissionIfNeeded();
+    }
+
+    private void askForContactsPermissionIfNeeded() {
+        ListPreference preference = (ListPreference) getPreferenceScreen().findPreference("contacts_policy");
+        int contactsPolicy = Integer.parseInt(preference.getValue());
+        if (contactsPolicy == 0) return;
+        if (getContext().checkSelfPermission(Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) return;
+        preference.setValue("0"); // Disable until we get the permission
+        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, contactsPolicy);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode != CONTACTS_POLICY_ONLY_KNOWN_NUMBERS && requestCode != CONTACTS_POLICY_ONLY_UNKNOWN_NUMBERS) return;
+        if (!permissions[0].equals(Manifest.permission.READ_CONTACTS)) {
+            throw new RuntimeException("Expected result for the READ_CONTACTS permission, got on for the " + permissions[0] + " permission");
+        }
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            ListPreference preference = (ListPreference) getPreferenceScreen().findPreference("contacts_policy");
+            preference.setValue(String.valueOf(requestCode));
+            return;
+        }
+        showContactsPermissionRationale(requestCode);
+    }
+
+    private void showContactsPermissionRationale(int contactsPolicy) {
+        boolean isPermanentlyDenied = !shouldShowRequestPermissionRationale(Manifest.permission.READ_CONTACTS);
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.contacts_permission_required)
+                .setMessage(getString(isPermanentlyDenied ? R.string.contacts_permission_permanently_denied : R.string.contacts_permission_required_message, getString(R.string.app_name)))
+                .setNegativeButton(R.string.disable_feature, (dialog, which) -> dialog.cancel())
+                .setPositiveButton(isPermanentlyDenied ? R.string.grant_in_settings : R.string.grant_permission, (dialog, which) -> {
+                    if (isPermanentlyDenied) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(Uri.fromParts("package", getContext().getPackageName(), null));
+                        startActivityForResult(intent, contactsPolicy);
+                    } else {
+                        requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, contactsPolicy);
+                    }
+                })
+                .show();
     }
 
     private void adjustSupportedSampleRates() {
@@ -187,6 +243,7 @@ public class PreferencesPresenter extends EdgeToEdgePreferenceFragment implement
     private void setPreferenceSummary(@NotNull Preference pref, @NotNull String key) {
         switch (key) {
             case "destination_directory":
+            case "contacts_policy":
             case "delay_before_answering":
             case "message_max_duration":
             case "message_cooldown_interval":
