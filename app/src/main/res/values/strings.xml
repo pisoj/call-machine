@@ -49,6 +49,25 @@
     <string name="last_modified_x">Last modified: %s</string>
     <string name="open_last_server_response_in_browser">Open last server response in browser</string>
     <string name="incall_music_bus_number">Incall music bus number (do not change)</string>
+    <string name="contacts_policy">Contacts policy</string>
+    <string name="contacts_permission_required">Contacts permission required</string>
+    <string name="contacts_permission_required_message">To limit answering based on contacts, %s needs to have the contacts permission.</string>
+    <string name="contacts_permission_permanently_denied">To limit answering based on contacts, %s needs to have the contacts permission which you permanently denied. Please allow the permission in settings to use the feature.</string>
+    <string name="grant_permission">Grant permission</string>
+    <string name="grant_in_settings">Grant in settings</string>
+    <string name="disable_feature">Disable feature</string>
+
+    <string-array name="contacts_policy_entries">
+        <item>Do not limit</item>
+        <item>Answer only known numbers</item>
+        <item>Answer only unknown numbers</item>
+    </string-array>
+    <string-array name="contacts_policy_entry_values">
+        <!-- Do not translate -->
+        <item>0</item>
+        <item>3</item> <!-- Match PreferencesPresenter.CONTACTS_POLICY_ONLY_KNOWN_NUMBERS -->
+        <item>4</item> <!-- Match PreferencesPresenter.CONTACTS_POLICY_ONLY_UNKNOWN_NUMBERS -->
+    </string-array>
 
     <string-array name="delay_before_answering_entries">
         <item>No delay</item>

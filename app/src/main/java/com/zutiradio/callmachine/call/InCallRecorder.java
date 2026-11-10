@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaRecorder;
 import android.support.annotation.NonNull;
-import android.telecom.Call;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +27,10 @@ public class InCallRecorder {
 
     private final MediaRecorder recorder;
 
-    public InCallRecorder(@NotNull Context ctx, @NonNull SharedPreferences sharedPreferences, @NotNull Call call) {
+    /**
+     * @param messageAttribution Text to be included in the file name of the message for easier identification later, usually phone number and the name of the contact
+     */
+    public InCallRecorder(@NotNull Context ctx, @NonNull SharedPreferences sharedPreferences, @NonNull String messageAttribution) {
         String[] audioFormatSetting = sharedPreferences.getString("message_encoding", "7/11").split("/"); // Default opus/ogg
         audioEncoder = Integer.parseInt(audioFormatSetting[0]);
         containerFormat = Integer.parseInt(audioFormatSetting[1]);
@@ -38,7 +40,7 @@ public class InCallRecorder {
 
         outputFile = new File(sharedPreferences.getString("destination_directory", ctx.getFilesDir().getAbsolutePath()),
                 ZonedDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd HH-mm-ss"))
-                        + " " + CallHelpers.getAttribution(ctx, call)
+                        + " " + messageAttribution
                         + "." + getContainerExtension(containerFormat)
         );
 

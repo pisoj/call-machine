@@ -4,7 +4,7 @@
 
     <uses-feature
         android:name="android.hardware.telephony"
-        android:required="false" />
+        android:required="true" />
     <attribution android:tag="incall_music" android:label="@string/app_name" />
 
     <!-- To record phone call audio -->
